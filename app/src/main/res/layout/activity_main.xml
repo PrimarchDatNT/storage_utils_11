@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dip"
+        android:text="@string/manage_external_storage_desc"
+        android:textSize="13sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_manager_storage"
+        style="@style/StandarAppButton"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:background="@drawable/standar_button_background"
+        android:text="@string/file_manager" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dip"
+        android:layout_marginBottom="12dip"
+        android:text="@string/media_storage_desc"
+        android:textSize="13sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_media_storage"
+        style="@style/StandarAppButton"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dip"
+        android:layout_marginEnd="20dip"
+        android:background="@drawable/standar_button_background"
+        android:gravity="center"
+        android:text="@string/media_storage" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dip"
+        android:layout_marginBottom="12dip"
+        android:text="@string/storage_access_framework_desc"
+        android:textSize="13sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_storage_access_framework"
+        style="@style/StandarAppButton"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:background="@drawable/standar_button_background"
+        android:gravity="center"
+        android:text="@string/storage_access_framework" />
+</LinearLayout>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/px16"
+        app:cardCornerRadius="@dimen/px4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_preview"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/px240"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/px60"
+                android:layout_marginTop="@dimen/px24"
+                android:layout_marginEnd="@dimen/px60"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px12"
+                android:paddingStart="@dimen/px16"
+                android:paddingEnd="@dimen/px16"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_file_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px12"
+                android:paddingStart="@dimen/px16"
+                android:paddingEnd="@dimen/px16"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_file_modify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px12"
+                android:paddingStart="@dimen/px16"
+                android:paddingEnd="@dimen/px16"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_file_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/px12"
+                android:paddingStart="@dimen/px16"
+                android:paddingEnd="@dimen/px16"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/bt_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/px72"
+                android:paddingEnd="@dimen/px72"
+                android:layout_marginTop="@dimen/px24"
+                android:layout_marginBottom="@dimen/px24"
+                android:background="@drawable/standar_button_background"
+                android:gravity="center"
+                android:paddingTop="@dimen/px12"
+                android:paddingBottom="@dimen/px12"
+                android:text="@string/open"
+                android:textAllCaps="true"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

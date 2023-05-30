@@ -1,0 +1,346 @@
+https://developer.android.com/about/versions/11/privacy/storage
+
+Access to app-specific directories on external storage
+
+On Android 11, apps can no longer access files in any other app's dedicated, app-specific directory within external storage.
+
+
+https://developer.android.com/training/data-storage/shared/media
+
+
+https://developer.android.com/training/data-storage/manage-all-files
+
+
+https://support.google.com/googleplay/android-developer/answer/9956427?hl=vi#zippy=%2Cm%E1%BB%A5c-%C4%91%C3%ADch-s%E1%BB%AD-d%E1%BB%A5ng-%C4%91%C6%B0%E1%BB%A3c-ph%C3%A9p-%C4%91%E1%BB%91i-v%E1%BB%9Bi-quy%E1%BB%81n-truy-c%E1%BA%ADp-v%C3%A0o-m%E1%BB%8Di-t%E1%BB%87p
+
+
+https://stackoverflow.com/questions/64250814/how-to-obtain-manage-external-storage-permission
+
+
+if (Environment.isExternalStorageManager()) {
+    //todo when permission is granted
+} else {
+    //request for the permission
+    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+    Uri uri = Uri.fromParts("package", getPackageName(), null);
+    intent.setData(uri);
+    startActivity(intent);
+}
+
+
+https://commonsware.com/blog/2019/10/19/scoped-storage-stories-saf-basics.html
+
+https://developer.android.com/training/data-storage#scoped-storage
+
+https://androidexplained.github.io/android/android11/scoped-storage/2020/09/29/file-saving-android-11.html
+
+// Query Package
+https://support.google.com/googleplay/android-developer/answer/10158779?hl=en#zippy=%2Cpermitted-uses-of-the-query-all-packages-permission%2Cexceptions
+https://proandroiddev.com/how-to-get-users-installed-apps-in-android-11-b4a4d2754286
+
+When your app opens a file for reading or writing, the system gives your app a URI permission grant for that file, which lasts until the user's device restarts.
+
+https://github.com/android/storage-samples/tree/main/ActionOpenDocument
+
+
+Scoped storage
+Mỗi app sẽ có bộ nhớ internal storage và 1 thứ ẩn không nhìn thấy được bởi các app khác
+Các app thường chỉ cần truy cập 1 số file đơn giản trong external storage nhưng khi gỡ cài đặt thì thường để lại file rác
+
+Scoped storage được giới thiệu ở Android10 : Preparing for scoped storage (Android Dev Summit '19)
+
+Scoped storage dùng để giải quyết vấn đề này và chỉ bắt buộc trên Android 11
+
+Nhờ scoped storage hệ thống sẽ biết các file thuộc app nào và khi gỡ app sẽ xóa hết
+
+Các ứng dụng có thể lưu trữ tệp vào gallery mà ko cần quyền
+Với các file media không thuộc phạm vi của app thì khi truy cập cần 2 thứ là createWrireRequest & createDeleteRequest (chỉ dùng đc trên Android11 trở lên) sẽ xin quyền cho 1 list file media
+
+createTrashRequest sẽ chuyển các tệp đó vào thùng rác và các tệp đó sẽ bị xóa sau 30 ngày
+
+Trên Android11 có thêm quyền MANAGE_EXTERNAL_STORAGE sẽ cung cấp khả năng truy cập toàn bộ file & phân vùng bộ nhớ
+
+Android 10 khi đọc ghi dữ liệu trên external sẽ cần thêm cờ android:requestLegacyExternalStorage
+
+Android 11 có thể đọc external storage mà ko cần xin quyền do Scoped storage
+
+/data/user/0/<app_packagename>: thư mục của internal storage - sqlite database path
+
+/storage/emulated/0/Android/data/<app_packagename>/files : thưc mục file của app trên external storage
+
+cả 2 đều không thể truy cập được bằng app khác
+
+dùng device manager
+
+
+Mỗi app đều có thư mục riêng trong bộ nhớ trong Internal Storage : android/data/<app package>
+Ko hiển hiển thị đối với các app khác kể cả khi có storage permission
+
+Sau đó mọi thứ khác được coi là bộ nhớ dùng chung => bao gồm các cả media collection & ứng dụng bên ngoài trên thẻ SD
+Và google nhận 1 nửa số app trên store yêu cầu quyền lưu trữ nhưng thực tế số app này ko cần quyền rộng như vậy với bộ nhớ.
+Vd: với 1 số app chỉ yêu cần chọn tệp hình ảnh để làm avatar hoặc tải xuống 1 số ảnh hoặc 1 file tài liệu từ email
+=> khi các ứng dụng có quyền truy cập rộng như vậy điều này làm cho các tệp nằm rải rác trên đĩa và khi gỡ cài đặt ứng dụng thì các tệp không bị xóa đi
+mà vẫn tồn tại => lãng phí bộ nhớ. Và khi quá nhiều người dùng đang gặp vấn đề về dung lượng ổ đĩa thấp.
+Google đưa ra các giải pháp là các ứng dụng được truy cập tệp cụ thể mà chúng cần và không có quyền truy cập rộng rãi.
+Do đó sinh ra khái niệm scoped-storage (được giới thiệu từ Android10) ý tưởng là chia nhỏ kho lưu trữ vào các bộ sưu tập được chỉ định và để giới hạn quyền truy cập.
+
+Các nguyên tắc cơ bản của scoped-storage(principles):
++ Better attribution - Phân bổ tốt hơn: Nghĩa là hệ thống biết ứng dụng đã tạo tệp nào => giúp người dùng quản lý bộ nhớ tốt hơn.
+Nó cũng đảm bảo rằng khi 1 ứng dụng được gỡ cài đặt tất cả các tệp liên quan của nó cũng bị xóa trừ khi người dùng muốn nó được giữ lại.
+
++ Protecting app data - Bảo vệ dữ liệu ứng dụng: Như đã đề cập các thư mục ứng dụng nội bộ trong Internal directory đã được riêng tư.
+Đảm bảo rằng các ứng dụng bên ngoài thư mục được tạo trên thẻ SD các ứng dụng khác cũng không thể dễ dàng đọc được => bảo vệ dữ liệu người dùng.
+Vd: Khi bạn tải 1 hình ảnh từ 1 tin nhắn riêng tự hoặc 1 bản pdf khai thuế và không muốn ứng dụng trong máy có quyền lưu trữ có thể đọc được.
+
+Vì vậy khi chúng tôi xem xét các nguyên tắc này => là tính năng chính trong scoped-storage trên Android10.
++ Unrestricted access to your own app storage : Mọi ứng dụng đều có quyền truy cập không bị hạn chế vào thư mục riêng của nó.
+Đây sẽ là cả 2 thư mục ứng dụng nội bộ và các thư mục ứng dụng bên ngoài vì vậy trên android10 không cần yêu cầ quyền lưu trữ để được ghi tệp vào thư mục riêng của ứng dụng trên thẻ SD.
+
++ Unrestricted media and downloads contributions: Quyền truy cập không hạn chế để đóng góp vào media storage và downloads.
+Google tạo 1 bộ sưu tập tải xuống mới với Android10 => theo cách này nếu bạn muốn lưu hình ảnh, nhạc, video hoặc bất kì tệp tài liệu nào khác => có thể làm mà không cần quyền truy cập
+(Query Media Storage cần quyền Read)
+(Dưới android10 khi thêm sửa xóa file vào Media storage thì phải xin quyền write còn từ Android10 hoặc lớn hơn có thể thêm sửa xóa vào Media storage chỉ cần quyền Read do scoped storage)
+Dialog khi xin quyền cũng thay đổi => check
+
++ Only media collection can be read with storage permission - Quyền lưu trữ được định nghĩa lại: Thay vì cấp quyền truy cập rộng rãi vào bộ nhớ dùng chung bạn thực sự chỉ có quyền truy cập vào phương tiện có tổ chức - Media storage (image, video, audio)
+
++ Local metadata requires permission: vị trí siêu dữ liệu là riêng tư với người dùng => tạo quyền mới là truy cập vị trí phương tiện => ứng dụng cần khai báo nếu muốn xem siêu dữ liệu vị trí đó trên hình ảnh => không khai báo thì metadata sẽ bị loại bỏ khi ứng dụng đọc tệp hình ảnh.
+Một số ảnh và video chứa thông tin vị trí trong siêu dữ liệu của chúng, cho biết địa điểm chụp ảnh hoặc nơi quay video.
+Nếu ứng dụng của bạn sử dụng bộ nhớ theo phạm vi, hệ thống sẽ ẩn thông tin vị trí theo mặc định. Để truy cập thông tin này, hãy hoàn thành các bước sau:
+Request the ACCESS_MEDIA_LOCATION permission in your app's manifest.
+Đây là runtime permission => không có gì đảm báo sẽ luôn có quyền truy cập ngay cả khi có quyền storage
+
+=> Từ đối tượng MediaStore của bạn, lấy các byte chính xác của bức ảnh bằng cách gọi setRequireOriginal ()
+Uri photoUri = Uri.withAppendedPath(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        cursor.getString(idColumnIndex));
+
+final double[] latLong;
+
+// Get location data using the Exifinterface library.
+// Exception occurs if ACCESS_MEDIA_LOCATION permission isn't granted.
+photoUri = MediaStore.setRequireOriginal(photoUri);
+InputStream stream = getContentResolver().openInputStream(photoUri);
+if (stream != null) {
+    ExifInterface exifInterface = new ExifInterface(stream);
+    double[] returnedLatLong = exifInterface.getLatLong();
+
+    // If lat/long is null, fall back to the coordinates (0, 0).
+    latLong = returnedLatLong != null ? returnedLatLong : new double[2];
+
+    // Don't reuse the stream associated with
+    // the instance of "ExifInterface".
+    stream.close();
+} else {
+    // Failed to load the stream, so return the coordinates (0, 0).
+    latLong = new double[2];
+}
+
++ System picker for all of other file types: Để đọc bất kì loại file nào khác ngoài file media => sử dụng Storage Access Framework - system file picker
+
++ Reading or writing outside of collection requires the system picker: SAF đảm bảo người dùng có thể chọn chính xác vị trí trên đĩa mà họ muốn tệp được lưu trữ
+
+Điều gì xảy ra trong Android10: Google giới thiệu scoped storage trong những bản phát hành beta đầu tiên và áp dụng các thay đổi cho tất cả các ứng dụng tất cả target SDK
+Tuy nhiên chúng Google nhận được phản hồi quan trọng của cộng đồng developer là những thay đổi như vậy rất khó để thay đổi và thực hiện trong 1 thời gian ngắn
+=> google cung cấp 1 cờ là requestLegacyExternalStorage khai báo trong manifest => quyền lưu trữ hoạt động như những phiên bản android trước.
+Tuy nhiên bất chấp 1 số lo ngại mà Google nhận được => 98% ứng dụng target android10 không dùng cờ requestLegacyExternalStorage
+=> những thay đổi với Scoped storage hầu hết được các developer chấp nhận nhưng cũng có nhiều ứng dụng vẫn chưa bắt đầu target Android10
+Google ý thức về trải nghiệm trong số 2% app còn lại => cải thiện và thêm các tính năng của scoped storage để các developer thay đổi dễ dàng hơn.
+
+Developer feedback
+Addressing developer concerns for the next release:
+
++Support for native libraries and file paths : Android10 thiếu đường dẫn tệp hoặc thư viện gốc
++Broad access to storage -> storage access framework issues : có danh mục cụ thể các ứng dụng thực sự cần quyền truy cập vào bộ nhớ (các app file manager, sao lưu và khôi phục ứng dụng)
+Nếu dùng SAF api có vấn đề là không dự định được sử dụng để truy cập vào rất nhiều tệp lồng nhau => vấn đề về hiệu suất & UI/UX (khi người dùng đi và chọn thư mục gốc để có được mức dung lượng này)
+Ngoài ra bây giờ Google đã thay đổi quyền lưu trữ có nghĩa là định nghĩa trở nên lộn xộn với ứng dụng đc cập nhật thì truy cập vào Media storage còn chưa cập nhật thì truy cập rộng rãi vào bộ nhớ
+=> có thể gây nhầm lẫn - Meaning of the storage permission
+
++Permission UI update: Cập nhật giao diện permission các ứng dụng thực sự chỉ có quyền truy cập vào Media storage có vẻ như chúng đang có quyền truy cập vào tất cả bộ nhớ dùng chung
+=> cập nhật permission dialog mới cho người dùng nếu ứng dụng sử dụng scoped storage
+
++Enable file paths and native libraries for media : Kích hoạt đường dẫn tệp chó các file media
+
++Update APIs for modifying media : cung cấp api để sửa đổi và xóa các tệp media mà không phải của ứng dụng tạo ra
+
++Special app access for select use case: Thêm 1 quyền truy cập ứng dụng đặc biệt dành riêng cho các ứng dụng truy cập vào bộ nhớ dùng chung - app kiểu file manager
+=> Google đưa vào white list
+
++Protected external app directories : Đảm bảo người dùng không thể chọn bằng SAF (Android10 vẫn pick dc bình thường) trên Android11 không thể pick dc file từ thư mục android/data
+
++Enforcement by target SDK : thay đổi dần dần và các developer có thời gian phát triển ứng dụng phù hợp với scoped storage
+
+Những thay đổi trên Android10 và tiếp theo:
+Media
+Từ những bản Android đầu tiền đã có các file media => nhằm chia sẻ file media với các ứng dụng khác.
+Trên Android10 có những thay đổi lớn để cho phép ứng dụng đóng góp vào Media storage mà không cần quyền nào tương tự như vậy các file media do app tạo ra có thể sửa xóa mà không cần quyền nào.
+Điều trên làm giảm số lượng ứng dụng yêu cầu một cách không cần thiết các quyền lưu trữ.
+Để đọc các file media không phải của app cần quyền read storage => query media của app tạo ra không cần quyền đọc, ghi file media vào Media storage ko cần xin quyền, sửa xóa file media do app tạo ra ko cần xin quyền
+
+Để đọc file media của các ứng dụng khác cần xin quyền đọc trên Android10 khi xóa file media của app khác sẽ cần xin quyền write external còn trên Android11 sẽ xin qua createWrireRequest & createDeleteRequest
+
++MediaStore.Downloads for non media files
+
+Quyền Read external không cung cấp bất kỳ quyền truy cập nào vào các file non media mà không phải app tạo ra
+=> muốn truy cập phải dùng SAF cho phép người dùng chọn file rõ ràng mà họ muốn truy cập => nếu cho quyền 1 tệp thì sẽ full access cho các file non media tùy ý không cần xin thêm quyền nào
+=> giúp người dùng kiểm soát đc những file nào mà họ muốn truy cập
+
+File Path access for Media
+Enable native libraries and Java File APIs
+Android10 locked down file path access
+Khóa quyền truy cập vào đường dẫn tệp chung => thưc hiện chính xách bảo mật của Google
+Nhưng qua feedback của Developer thì chưa khóa mà khi trên Android11 sẽ khóa truy cập qua tệp
+
+Nhiều thư viện C/C++ chỉ chấp nhận đường dẫn tệp => chỉ nên dùng Media storage vì thư mục ảnh sẽ chỉ chứa ảnh...
+Tạo các tệp không phải file media trong thư mục Downloads và muốn truy cập các file non media của app phải dùng SAF
+Do đó các tệp của ứng dụng tạo ra sẽ được phân bổ chính xác và tính vào mức sử dụng đĩa của app trên thiết bị => Media storage cung cấp hiệu suất tốt nhất
+
+File path performace:
+Opens and first read are fairly expensive: nếu muốn sử dụng đường dẫn tệp nên cố gắng tránh mở và đóng cùng 1 tệp nhiều lần làm giảm thông I/O và pin
+
+Edit file không phải do app tạo ra thì cần xin quyền cho những file đó qua dialog hệ thống
+
+SAF:
+ACTION_OPEN_DOCUMENT_TREE được thay đổi: yêu cần quền truy cập cho toàn bộ thư mục được chọn
+trên Android10 có thể yêu cầu cho thư mục storage/emulated/0 và toàn bộ các thư mục trong shared external storage
+Nhưng trên Android11 thì thư mục root - Android/Data(thư mục chứa external directory của các app trong máy) - Download không cấp quyền được
+Các ứng dụng vẫn có thể chọn các tệp riêng lẻ từ thư mục Download (không thể chọn toàn bộ thư mục)
+Bổ sung thêm 1 quyền đặc biệt cho các app dạng file manager chứng minh app là file manager thì khai báo biểu mẫu cho Google Play
+No access to external app directories => Protected external app directories
+
+Tóm tắt scoped storage:
+
+Media can be contributed without permission: Tạo file vào media storage mà không cần quyền ngoài ra các file non media sẽ được tạo trong MediaStore.Downloads
+
+Non media requires the system picker: SAF
+
+Request permission for media location: ACCESS_MEDIA_LOCATION
+
+File path access for media: chuẩn bị giới thiệu truy cập đường dẫn tệp cho việc đọc media
+
+Media modification APIs: createWrireRequest & createDeleteRequest & createTrashRequest(chuyển media vào thùng rác sẽ tự xóa sau 1 khoảng thời gian) & createFavoriteRequest
+
+Giới hạn SAF: người dùng không thể chọn app specific data và các dữ liệu nhạy cảm
+
+Special app access for select use case: MANAGE_EXTERNAL_STORAGE
+
+Enforcement by target SDK
+
+which APIs are useful for you?
+
+Để đơn giản hóa trải nghiệm của developer trên scoped storage
+
+MediaPlayer app: Read only video files => MediaStore APIs làm tăng hiệu suất
+MediaStore query qua ContentResolver và truy vấn bằng câu lệnh SQL
+
+Các file media do app tạo ra sẽ có 1 thuộc tính nhận dạng owner_package_name = app packagename
+
+1 ứng dụng viết email cho phép đính kèm tệp zip hoặc pdf - file non media thì sẽ dùng SAF
+
+SAF khi cấp quyền cho directories or file sẽ bị reset khi device khởi động lại muốn nhới quyền cần xin qua takePresistableUriPermission => check xem tệp này bị xóa chưa
+
+ACTION_CREATE_DOCUMENT tạo DocumentFile
+
+
+preserveLegacyExternalStorage
+
+preserveLegacyExternalStorage flag allows an app to retain legacy storage access on upgrades even while targeting Android 11. However beware that on new installs on Android 11, this flag has no effect. Please make code changes to adapt to Scoped Storage before targeting Android 11. Learn more about data migration best practices.
+
+https://medium.com/microsoft-mobile-engineering/scoped-storage-in-android-10-android-11-28d58d989f3c
+
+https://www.youtube.com/watch?v=RjyYCUW-9tY
+
+https://medium.com/androiddevelopers/android-11-storage-faq-78cefea52b7c
+
+Scoped storage Android10 tóm tắt:
+1 Các ứng dụng có quyền truy cập không hạn chế vào bộ nhớ riêng của chúng
+
+2 Bộ nhớ dùng chung Share storage được chia thành bốn bộ sưu tập : images, video, audio, downloads ghi và đọc file media do app tạo ra vào 4 bộ sưu tập này thoải mái không cần quyền (Dùng MediaStore APIs để ghi -Java Files cần requestLegacyExternalStorage)
+
+3 Cần quyền Read để đọc những file media của app khác chia sẻ vào bộ sưu tập MediaStore - truy cập các file non media trong downloads hoặc ngoài thì cần dùng System picker - SAF
+
+4 Xóa sửa các file media không phải do app tạo ra cần xin quyền cho những file media đó yêu cầu xác nhận của người dùng
+
+5 Locaiton metadata - đọc vị trí của file ảnh và video muốn đọc cần xin quyền mới ACCESS_MEDIA_LOCATION
+
+Scoped storage Android11:
+
+1 Enable File path APIs: App có thể chọn API khác dựa vào đường dẫn tệp cục bộ không xin quyền Read thì chỉ đọc được thư mục còn xin quyền Read đọc được file media (các file trong external - storage/emulated/0)
+Các file do app tạo ra và gửi vào MediaStore thì cũng có thể thao tác được bằng bằng Java File (chỉ trên Android11 - Android10 cần có cờ requestLegacyExternalStorage & quyền WRITE_STORAGE)
+
+2 Bulk media modification APIs : createWrireRequest & createDeleteRequest...
+
+3 All Files Access: MANAGE_EXTERNAL_STORAGE
+
+4 Private app storage: App storage directory là riêng tư từ Android11 các app khác không thể truy cập bằng bất kì cách nào trừ File Manager của hệ thống
+
+Using File Paths:
+Adroid11
+MediaStore cung cấp thao tác file qua ParcelFileDescriptor & Java I/O stream
+
+Khi tạo save file vào thư mục của MediaStore bằng Java File thì file này sẽ ngay lập tức được thêm MediaStore
+/storage/emulated/0/Music | canWrite: true
+/storage/emulated/0/Podcasts | canWrite: false
+/storage/emulated/0/Ringtones | canWrite: false
+/storage/emulated/0/Alarms | canWrite: false
+/storage/emulated/0/Notifications | canWrite: false
+/storage/emulated/0/Pictures | canWrite: true
+/storage/emulated/0/Movies | canWrite: true
+/storage/emulated/0/Download | canWrite: true
+/storage/emulated/0/DCIM | canWrite: true (digital camera images- tên thư mục trong Quy tắc thiết kế cho hệ thống Tệp máy ảnh, một phần của hệ thống tệp cho máy ảnh kỹ thuật số)
+/storage/emulated/0/Documents | canWrite: true (không biết định dạng file có thể tạo được)
+
+Lưu ý: chỉ có thể tạo file thuộc định dạng được hộ trợ trong các thư mục được phép truy cập của MediaStore
+Android10 khi đọc file từ External Storage bằng Java File sẽ cần thêm cà requestLegacyExternalStorage & Storage permission
+Còn Android11 khi không có READ_STORAGE sẽ chỉ đọc được folder còn khi có quyền sẽ đọc được file nhưng không thể write file
+
+https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9hqKx4qZWolQxy59Bt2
+
+https://www.youtube.com/watch?v=vaD-DPI6sgU
+
+com.google.android.documentsui
+
+com.android.externalstorage.documents
+
+    private static Uri.Builder getBaseDocumentUriBuilder(String authority) {
+        return new Uri.Builder().scheme(ContentResolver.SCHEME_CONTENT)
+            .authority(authority).appendPath(PATH_DOCUMENT);
+    }
+buildDocumentUriMaybeUsingTree
+
+adb shell ls
+Option Description
+-a  Displays all files.
+-b  Displays nonprinting characters in octal.
+-c  Displays files by file timestamp.
+-C  Displays files in a columnar format (default)
+-d  Displays only directories.
+-f  Interprets each name as a directory, not a file.
+-F  Flags filenames.
+-g  Displays the long format listing, but exclude the owner name.
+-i  Displays the inode for each file.
+-l  Displays the long format listing.
+-L  Displays the file or directory referenced by a symbolic link.
+-m  Displays the names as a comma-separated list.
+-n  Displays the long format listing, with GID and UID numbers.
+-o  Displays the long format listing, but excludes group name.
+-p  Displays directories with /
+-q  Displays all nonprinting characters as ?
+-r  Displays files in reverse order.
+-R  Displays subdirectories as well.
+-t  Displays newest files first. (based on timestamp)
+-u  Displays files by the file access time.
+-x  Displays files as rows across the screen.
+-1  Displays each entry on a line.
+
+https://source.android.com/compatibility/cdd
+
+https://source.android.com/compatibility/android-cdd
+
+https://source.android.com/compatibility/android-cdd#7_6_memory_and_storage
+
+ACTION_GET_CONTENT không có quyền write cho Uri
+
+https://developer.android.com/reference/android/os/storage/StorageVolume
+
+preserveLegacyExternalStorage giữ lại cờ hiệu lực cho cờ requestLegacyExternalStorage mặc dù app đã target30 nhưng vẫn không truy cập vào được Android/data

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MediaStorageActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/image"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_sharp_image_24" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/video"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_sharp_video_library_24" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_audio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/audio"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_sharp_library_music_24" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_downloaded"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/downloads"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_sharp_sim_card_download_24" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginTop="8dip"
+        android:layout_marginBottom="8dip"
+        android:background="@color/cardview_shadow_start_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_write_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/write_image"
+            android:textSize="10sp"
+            app:drawableTopCompat="@drawable/ic_baseline_add_24"
+            tools:ignore="SmallSp" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_write_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/write_video"
+            android:textSize="10sp"
+            app:drawableTopCompat="@drawable/ic_baseline_add_24"
+            tools:ignore="SmallSp" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_write_audio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/write_audio"
+            android:textSize="10sp"
+            app:drawableTopCompat="@drawable/ic_baseline_add_24"
+            tools:ignore="SmallSp" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_write_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/write_file"
+            android:textSize="10sp"
+            app:drawableTopCompat="@drawable/ic_sharp_text_snippet_24"
+            tools:ignore="SmallSp" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/write_online_file"
+            android:textSize="10sp"
+            app:drawableTopCompat="@drawable/ic_baseline_file_download_24"
+            tools:ignore="SmallSp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginTop="8dip"
+        android:layout_marginBottom="8dip"
+        android:background="@color/cardview_shadow_start_color" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_media"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

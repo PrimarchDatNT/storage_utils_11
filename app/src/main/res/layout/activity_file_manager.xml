@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FileManagerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dip"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/iv_create_file"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="@string/write_new_file"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_sharp_file_copy_24" />
+
+        <View
+            android:layout_width="0.5dip"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dip"
+            android:background="@color/cardview_shadow_start_color" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/iv_create_folder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="4dip"
+            android:text="@string/create_new_folder"
+            android:textSize="13sp"
+            app:drawableTopCompat="@drawable/ic_baseline_create_new_folder_24" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dip"
+        android:gravity="center"
+        android:paddingStart="8dip"
+        android:paddingEnd="8dip"
+        android:text="Hello World!"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        app:drawableStartCompat="@drawable/ic_baseline_arrow_right_24" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginTop="4dip"
+        android:background="@color/cardview_shadow_start_color" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_folder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dip"
+        tools:listitem="@layout/item_file_list" />
+</LinearLayout>

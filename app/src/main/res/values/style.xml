@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="fontFamily">@font/open_sans_semibold</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_dialog_bg_radius_top</item>
+    </style>
+
+    <style name="StandarAppButton">
+        <item name="android:background">@drawable/standar_button_background</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:paddingTop">7.6dip</item>
+        <item name="android:paddingBottom">7.6dip</item>
+        <item name="android:paddingStart">4dip</item>
+        <item name="android:paddingEnd">4dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="title_background_drawable_vertical">
+        <item name="android:background">@drawable/sys_title_bg_vertical</item>
+    </style>
+    <style name="title_background_drawable_horizontal">
+        <item name="android:background">@drawable/sys_title_bg_horizontal</item>
+    </style>
+    <style name="title_background_vertical" parent="android:Theme">
+        <item name="android:windowTitleBackgroundStyle">@style/title_background_drawable_vertical</item>
+    </style>
+    <style name="title_background_horizontal" parent="android:Theme">
+        <item name="android:windowTitleBackgroundStyle">@style/title_background_drawable_horizontal</item>
+    </style>
+
+</resources>

@@ -1,0 +1,16 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+/mydynamiccalendar/build
+.externalNativeBuild
+.idea
+.cxx
+gradle
+gradlew
+gradlew.batx
+/gradle
